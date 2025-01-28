@@ -13,11 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.torch.pulse_logger.core;
+package org.torch.pulse.logger.core;
 
-import org.torch.pulse_logger.framework.log4j.Log4J2Logger;
-import org.torch.pulse_logger.framework.slf4j.SLF4JLogger;
-import org.torch.pulse_logger.utils.PulseLoggerKeyValueMap;
+import org.torch.pulse.logger.framework.log4j.Log4J2Logger;
+import org.torch.pulse.logger.framework.slf4j.SLF4JLogger;
+import org.torch.pulse.logger.utils.PulseLoggerKeyValueMap;
 
 public sealed interface PulseLogger permits SLF4JLogger, Log4J2Logger {
 

@@ -13,11 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.torch.pulse_logger.core;
+package org.torch.pulse.logger.core;
 
 import java.util.concurrent.atomic.AtomicReference;
-import org.torch.pulse_logger.framework.log4j.Log4J2LoggingAdapter;
-import org.torch.pulse_logger.framework.slf4j.SLF4JLoggingAdapter;
+import org.torch.pulse.logger.framework.log4j.Log4J2LoggingAdapter;
+import org.torch.pulse.logger.framework.slf4j.SLF4JLoggingAdapter;
 
 public class PulseLoggerFactory {
   private static final AtomicReference<PulseLoggingFrameworkAdapter> adapterRef =

@@ -1,31 +1,29 @@
 /*
  * Copyright 2025 Torch
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
+ * in compliance with the License. You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * Unless required by applicable law or agreed to in writing, software distributed under the License
+ * is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
+ * or implied. See the License for the specific language governing permissions and limitations under
+ * the License.
  */
-package org.torch.pulse_logger.framework.log4j;
+package org.torch.pulse.logger.framework.slf4j;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Stream;
-import org.apache.logging.log4j.Logger;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -33,19 +31,25 @@ import org.junit.jupiter.params.provider.MethodSource;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import org.torch.pulse_logger.utils.PulseLoggerKeyValueMap;
+import org.slf4j.Logger;
+import org.slf4j.spi.LoggingEventBuilder;
+import org.torch.pulse.logger.utils.PulseLoggerKeyValueMap;
 
-/** */
-public class Log4J2LoggerTest {
+public class SLF4JLoggerTest {
 
-  @InjectMocks private Log4J2Logger pulseLogger;
+  @InjectMocks
+  private SLF4JLogger pulseLogger;
 
-  @Mock private Logger mockLogger;
+  @Mock
+  private Logger mockLogger;
+
+  @Mock
+  private LoggingEventBuilder mockBuilder;
 
   @BeforeEach
   void setUp() {
     MockitoAnnotations.openMocks(this);
-    pulseLogger = new Log4J2Logger(mockLogger);
+    pulseLogger = new SLF4JLogger(mockLogger);
   }
 
   @ParameterizedTest
@@ -54,28 +58,28 @@ public class Log4J2LoggerTest {
     switch (testData.level) {
       case "trace":
         when(mockLogger.isTraceEnabled()).thenReturn(false);
-        pulseLogger.trace(testData.message, testData.args);
-        verify(mockLogger, never()).trace(String.format(testData.message, testData.args));
+        pulseLogger.trace(testData.message);
+        verify(mockLogger, never()).trace(testData.message);
         break;
       case "debug":
         when(mockLogger.isDebugEnabled()).thenReturn(false);
-        pulseLogger.debug(testData.message, testData.args);
-        verify(mockLogger, never()).debug(String.format(testData.message, testData.args));
+        pulseLogger.debug(testData.message);
+        verify(mockLogger, never()).debug(testData.message);
         break;
       case "info":
         when(mockLogger.isInfoEnabled()).thenReturn(false);
-        pulseLogger.info(testData.message, testData.args);
-        verify(mockLogger, never()).info(String.format(testData.message, testData.args));
+        pulseLogger.info(testData.message);
+        verify(mockLogger, never()).info(testData.message);
         break;
       case "warn":
         when(mockLogger.isWarnEnabled()).thenReturn(false);
-        pulseLogger.warn(testData.message, testData.args);
-        verify(mockLogger, never()).warn(String.format(testData.message, testData.args));
+        pulseLogger.warn(testData.message);
+        verify(mockLogger, never()).warn(testData.message);
         break;
       case "error":
         when(mockLogger.isErrorEnabled()).thenReturn(false);
-        pulseLogger.error(testData.message, testData.args);
-        verify(mockLogger, never()).error(String.format(testData.message, testData.args));
+        pulseLogger.error(testData.message);
+        verify(mockLogger, never()).error(testData.message);
         break;
     }
   }
@@ -87,93 +91,114 @@ public class Log4J2LoggerTest {
       case "trace":
         when(mockLogger.isTraceEnabled()).thenReturn(true);
         pulseLogger.trace(testData.message, testData.args);
-        verify(mockLogger, times(1)).trace(String.format(testData.message, testData.args));
+        verify(mockLogger, times(1)).trace(testData.message, testData.args);
         break;
       case "debug":
         when(mockLogger.isDebugEnabled()).thenReturn(true);
         pulseLogger.debug(testData.message, testData.args);
-        verify(mockLogger, times(1)).debug(String.format(testData.message, testData.args));
+        verify(mockLogger, times(1)).debug(testData.message, testData.args);
         break;
       case "info":
         when(mockLogger.isInfoEnabled()).thenReturn(true);
         pulseLogger.info(testData.message, testData.args);
-        verify(mockLogger, times(1)).info(String.format(testData.message, testData.args));
+        verify(mockLogger, times(1)).info(testData.message, testData.args);
         break;
       case "warn":
         when(mockLogger.isWarnEnabled()).thenReturn(true);
         pulseLogger.warn(testData.message, testData.args);
-        verify(mockLogger, times(1)).warn(String.format(testData.message, testData.args));
+        verify(mockLogger, times(1)).warn(testData.message, testData.args);
         break;
       case "error":
         when(mockLogger.isErrorEnabled()).thenReturn(true);
         pulseLogger.error(testData.message, testData.args);
-        verify(mockLogger, times(1)).error(String.format(testData.message, testData.args));
+        verify(mockLogger, times(1)).error(testData.message, testData.args);
         break;
     }
   }
 
   @ParameterizedTest
   @MethodSource("provideTestDataKVMap")
-  void testMDCLoggingDisabled(TestDataKVMap testData) {
+  void testStructuredLoggingDisabled(TestDataKVMap testData) {
     switch (testData.level) {
       case "trace":
         when(mockLogger.isTraceEnabled()).thenReturn(false);
+        when(mockLogger.atTrace()).thenReturn(mockBuilder);
         pulseLogger.trace(testData.message, testData.keyValueMap);
-        verify(mockLogger, never()).trace(testData.message);
+        verify(mockLogger, never()).atTrace();
         break;
       case "debug":
         when(mockLogger.isDebugEnabled()).thenReturn(false);
+        when(mockLogger.atDebug()).thenReturn(mockBuilder);
         pulseLogger.debug(testData.message, testData.keyValueMap);
-        verify(mockLogger, never()).debug(testData.message);
+        verify(mockLogger, never()).atDebug();
         break;
       case "info":
         when(mockLogger.isInfoEnabled()).thenReturn(false);
+        when(mockLogger.atInfo()).thenReturn(mockBuilder);
         pulseLogger.info(testData.message, testData.keyValueMap);
-        verify(mockLogger, never()).info(testData.message);
+        verify(mockLogger, never()).atInfo();
         break;
       case "warn":
         when(mockLogger.isWarnEnabled()).thenReturn(false);
+        when(mockLogger.atWarn()).thenReturn(mockBuilder);
         pulseLogger.warn(testData.message, testData.keyValueMap);
-        verify(mockLogger, never()).warn(testData.message);
+        verify(mockLogger, never()).atWarn();
         break;
       case "error":
         when(mockLogger.isErrorEnabled()).thenReturn(false);
+        when(mockLogger.atError()).thenReturn(mockBuilder);
         pulseLogger.error(testData.message, testData.keyValueMap);
-        verify(mockLogger, never()).error(testData.message);
+        verify(mockLogger, never()).atError();
         break;
     }
   }
 
   @ParameterizedTest
   @MethodSource("provideTestDataKVMap")
-  void testMDCLoggingEnabled(TestDataKVMap testData) {
+  void testStructuredLoggingEnabled(TestDataKVMap testData) {
     switch (testData.level) {
       case "trace":
         when(mockLogger.isTraceEnabled()).thenReturn(true);
+        when(mockLogger.atTrace()).thenReturn(mockBuilder);
         pulseLogger.trace(testData.message, testData.keyValueMap);
-        verify(mockLogger, times(1)).trace(testData.message);
+        verify(mockLogger).atTrace();
         break;
       case "debug":
         when(mockLogger.isDebugEnabled()).thenReturn(true);
+        when(mockLogger.atDebug()).thenReturn(mockBuilder);
         pulseLogger.debug(testData.message, testData.keyValueMap);
-        verify(mockLogger, times(1)).debug(testData.message);
+        verify(mockLogger).atDebug();
         break;
       case "info":
         when(mockLogger.isInfoEnabled()).thenReturn(true);
+        when(mockLogger.atInfo()).thenReturn(mockBuilder);
         pulseLogger.info(testData.message, testData.keyValueMap);
-        verify(mockLogger, times(1)).info(testData.message);
+        verify(mockLogger).atInfo();
         break;
       case "warn":
         when(mockLogger.isWarnEnabled()).thenReturn(true);
+        when(mockLogger.atWarn()).thenReturn(mockBuilder);
         pulseLogger.warn(testData.message, testData.keyValueMap);
-        verify(mockLogger, times(1)).warn(testData.message);
+        verify(mockLogger).atWarn();
         break;
       case "error":
         when(mockLogger.isErrorEnabled()).thenReturn(true);
+        when(mockLogger.atError()).thenReturn(mockBuilder);
         pulseLogger.error(testData.message, testData.keyValueMap);
-        verify(mockLogger, times(1)).error(testData.message);
+        verify(mockLogger).atError();
         break;
     }
+
+    if (testData.keyValueMap != null && !testData.keyValueMap.getKeyValueMap().isEmpty()) {
+      testData.keyValueMap.getKeyValueMap().forEach((key, value) -> {
+        verify(mockBuilder, times(1)).addKeyValue(key, value != null ? value : "null");
+      });
+    } else {
+      verify(mockBuilder, never()).addKeyValue(anyString(), any());
+    }
+
+    // Verify that the final message is logged
+    verify(mockBuilder, times(1)).log(testData.message);
   }
 
   @Test
@@ -262,22 +287,13 @@ public class Log4J2LoggerTest {
 
     @Override
     public String toString() {
-      return "TestDataSimple{"
-          + "level='"
-          + level
-          + '\''
-          + ", message='"
-          + message
-          + '\''
-          + ", args="
-          + Arrays.toString(args)
-          + '}';
+      return "TestDataSimple{" + "level='" + level + '\'' + ", message='" + message + '\''
+          + ", args=" + Arrays.toString(args) + '}';
     }
   }
 
   private static Stream<TestDataSimple> provideTestDataSimple() {
-    return Stream.of(
-        new TestDataSimple("trace", "Trace message", "test"),
+    return Stream.of(new TestDataSimple("trace", "Trace message", "test"),
         new TestDataSimple("debug", "Debug message", "arg1"),
         new TestDataSimple("info", "Info message", "arg1", 42),
         new TestDataSimple("warn", "Warn message", "arg1", 43),
@@ -297,16 +313,8 @@ public class Log4J2LoggerTest {
 
     @Override
     public String toString() {
-      return "TestData{"
-          + "level='"
-          + level
-          + '\''
-          + ", message='"
-          + message
-          + '\''
-          + ", keyValueMap="
-          + keyValueMap
-          + '}';
+      return "TestData{" + "level='" + level + '\'' + ", message='" + message + '\''
+          + ", keyValueMap=" + keyValueMap + '}';
     }
   }
 
@@ -315,18 +323,18 @@ public class Log4J2LoggerTest {
     mapWithNullValue.put("key3", null); // Null value is allowed
 
     return Stream.of(
-        new TestDataKVMap(
-            "trace", "Trace message", new PulseLoggerKeyValueMap(Map.of("key1", "value1"))),
-        new TestDataKVMap(
-            "debug", "Debug message", new PulseLoggerKeyValueMap(Map.of("key2", "value2"))),
-        new TestDataKVMap(
-            "info", "Info message", new PulseLoggerKeyValueMap(Map.of("key3", "value3"))),
+        new TestDataKVMap("trace", "Trace message",
+            new PulseLoggerKeyValueMap(Map.of("key1", "value1"))),
+        new TestDataKVMap("debug", "Debug message",
+            new PulseLoggerKeyValueMap(Map.of("key2", "value2"))),
+        new TestDataKVMap("info", "Info message",
+            new PulseLoggerKeyValueMap(Map.of("key3", "value3"))),
         new TestDataKVMap("info", "Info message", new PulseLoggerKeyValueMap(Map.of())),
-        new TestDataKVMap(
-            "warn", "Warn message", new PulseLoggerKeyValueMap(Map.of("key4", "value4"))),
+        new TestDataKVMap("warn", "Warn message",
+            new PulseLoggerKeyValueMap(Map.of("key4", "value4"))),
         new TestDataKVMap("warn", "Warn message", null),
-        new TestDataKVMap(
-            "error", "Error message", new PulseLoggerKeyValueMap(Map.of("key5", "value5"))),
+        new TestDataKVMap("error", "Error message",
+            new PulseLoggerKeyValueMap(Map.of("key5", "value5"))),
         new TestDataKVMap("error", "Error message", new PulseLoggerKeyValueMap(mapWithNullValue)));
   }
 }

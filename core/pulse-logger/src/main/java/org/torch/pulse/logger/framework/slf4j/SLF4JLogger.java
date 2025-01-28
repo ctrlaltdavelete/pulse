@@ -13,12 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.torch.pulse_logger.framework.slf4j;
+package org.torch.pulse.logger.framework.slf4j;
 
 import org.slf4j.Logger;
 import org.slf4j.spi.LoggingEventBuilder;
-import org.torch.pulse_logger.core.PulseLogger;
-import org.torch.pulse_logger.utils.PulseLoggerKeyValueMap;
+import org.torch.pulse.logger.core.PulseLogger;
+import org.torch.pulse.logger.utils.PulseLoggerKeyValueMap;
 
 public final class SLF4JLogger implements PulseLogger {
 

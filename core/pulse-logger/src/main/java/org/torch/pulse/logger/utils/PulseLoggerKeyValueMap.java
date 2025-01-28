@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.torch.pulse_logger.utils;
+package org.torch.pulse.logger.utils;
 
 import java.util.Map;
 

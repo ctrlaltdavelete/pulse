@@ -13,12 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.torch.pulse_logger.framework.log4j;
+package org.torch.pulse.logger.framework.log4j;
 
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.ThreadContext;
-import org.torch.pulse_logger.core.PulseLogger;
-import org.torch.pulse_logger.utils.PulseLoggerKeyValueMap;
+import org.torch.pulse.logger.core.PulseLogger;
+import org.torch.pulse.logger.utils.PulseLoggerKeyValueMap;
 
 public final class Log4J2Logger implements PulseLogger {
 
