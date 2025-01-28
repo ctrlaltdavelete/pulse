@@ -13,7 +13,7 @@
   <version>1.0.0</version>
   <packaging>jar</packaging>
 
-  <name>pulse-oshi</name>
+  <name>Pulse Operation System and Hardware Information</name>
 
   <dependencies>
     <dependency>
