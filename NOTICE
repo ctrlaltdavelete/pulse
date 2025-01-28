@@ -1,0 +1,12 @@
+Pulse Logger
+Copyright 2025 Torch
+
+This product includes software developed by Torch. Pulse Logger is a Logging Framework Adaptation.
+---
+
+Third-Party Components:
+
+- SLF4J (https://www.slf4j.org/) licensed under the MIT License.
+- Log4J2 (https://logging.apache.org/log4j/2.x/) licensed under the Apache License, Version 2.0.
+
+No part of this product is developed, endorsed, or maintained by the Apache Software Foundation.
