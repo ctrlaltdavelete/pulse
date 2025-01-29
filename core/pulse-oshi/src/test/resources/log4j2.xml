@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="warn" monitorInterval="30">
+    <!-- 
+      status="warn" means Log4j will log internal errors at WARN level or higher.
+      monitorInterval="30" reloads config every 30 seconds if changed on disk (optional).
+    -->
+
+    <Appenders>
+      <!-- A simple console appender for test outputs -->
+      <Console name="Console" target="SYSTEM_OUT">
+          <PulseLoggerLayout/>
+      </Console>
+    </Appenders>
+
+    <Loggers>
+      <!-- 
+        Root logger at DEBUG so all log levels (debug, info, warn, error) go to console 
+        during unit tests. Adjust as needed to reduce verbosity. 
+      -->
+      <Root level="trace">
+          <AppenderRef ref="Console" />
+      </Root>
+    </Loggers>
+</Configuration>

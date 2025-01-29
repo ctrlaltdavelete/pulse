@@ -53,19 +53,23 @@
     <dependency>
       <groupId>org.junit.jupiter</groupId>
       <artifactId>junit-jupiter-engine</artifactId>
+      <scope>test</scope>
     </dependency>
     <!-- Parameterized Tests -->
     <dependency>
       <groupId>org.junit.jupiter</groupId>
       <artifactId>junit-jupiter-params</artifactId>
+      <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>org.mockito</groupId>
       <artifactId>mockito-core</artifactId>
+      <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>org.mockito</groupId>
       <artifactId>mockito-junit-jupiter</artifactId>
+      <scope>test</scope>
     </dependency>
   </dependencies>
   
@@ -75,32 +79,33 @@
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-compiler-plugin</artifactId>
         <configuration>
-          <source>${maven.compiler.source}</source>
-          <target>${maven.compiler.target}</target>
-          <release>${maven.compiler.release}</release>
-
           <!-- Enable annotation processing -->
           <annotationProcessorPaths>
             <path>
               <groupId>org.apache.logging.log4j</groupId>
               <artifactId>log4j-core</artifactId>
-              <version>${log4j-core.version}</version> <!-- or your Log4J2 version -->
+              <version>${log4j-core.version}</version>
             </path>
           </annotationProcessorPaths>
         </configuration>
       </plugin>
 
-        <plugin>
-          <groupId>com.diffplug.spotless</groupId>
-          <artifactId>spotless-maven-plugin</artifactId>
-          <configuration>
-            <java>
-              <licenseHeader>
-                <file>${project.parent.basedir}/HEADER</file>
-              </licenseHeader>
-            </java>
-          </configuration>
-        </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-surefire-plugin</artifactId>
+      </plugin>
+
+      <plugin>
+        <groupId>com.diffplug.spotless</groupId>
+        <artifactId>spotless-maven-plugin</artifactId>
+        <configuration>
+          <java>
+            <licenseHeader>
+              <file>${project.parent.basedir}/HEADER</file>
+            </licenseHeader>
+          </java>
+        </configuration>
+      </plugin>
     </plugins>
   </build>
 </project>

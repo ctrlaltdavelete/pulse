@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="WARN">
+    <!-- Appenders: one RollingFile per class, plus a console appender -->
+    <Appenders>
+        <!-- RollingFile for OshiSystemMetricsProvider -->
+        <RollingFile
+            name="OshiSystemMetricsProviderAppender"
+            fileName="logs/OshiSystemMetricsProvider.log"
+            filePattern="logs/OshiSystemMetricsProvider-%d{yyyy-MM-dd}-%i.log.gz">
+            <PatternLayout>
+                <PulseLoggerLayout/>
+            </PatternLayout>
+            <Policies>
+                <!-- Triggers when the log hits 10MB -->
+                <SizeBasedTriggeringPolicy size="10 MB" />
+                <!-- Also trigger a new file daily -->
+                <TimeBasedTriggeringPolicy />
+            </Policies>
+        </RollingFile>
+
+        <!-- RollingFile for DiskMetrics -->
+        <RollingFile
+            name="DiskMetricsAppender"
+            fileName="logs/DiskMetrics.log"
+            filePattern="logs/DiskMetrics-%d{yyyy-MM-dd}-%i.log.gz">
+            <PatternLayout>
+                <PulseLoggerLayout/>
+            </PatternLayout>
+            <Policies>
+                <SizeBasedTriggeringPolicy size="10 MB" />
+                <TimeBasedTriggeringPolicy />
+            </Policies>
+        </RollingFile>
+
+        <!-- RollingFile for SystemMetrics -->
+        <RollingFile
+            name="SystemMetricsAppender"
+            fileName="logs/SystemsMetrics.log"
+            filePattern="logs/SystemMetrics-%d{yyyy-MM-dd}-%i.log.gz">
+            <PatternLayout>
+                <PulseLoggerLayout/>
+            </PatternLayout>
+            <Policies>
+                <SizeBasedTriggeringPolicy size="10 MB" />
+                <TimeBasedTriggeringPolicy />
+            </Policies>
+        </RollingFile>
+
+    </Appenders>
+
+    <Loggers>
+        <!-- Logger for OshiSystemMetricsProvider -->
+        <Logger name="OshiSystemMetricsProviderLogger" level="debug" additivity="false">
+            <AppenderRef ref="OshiSystemMetricsProviderAppender" />
+            <!-- If you also want console output for this class, add: 
+            <AppenderRef ref=\"Console\" /> 
+            -->
+        </Logger>
+
+        <!-- Logger for DiskMetrics -->
+        <Logger name="DiskMetricsLogger" level="debug" additivity="false">
+            <AppenderRef ref="DiskMetricsAppender" />
+            <!-- If you also want console output for this class, add:
+            <AppenderRef ref=\"Console\" />
+            -->
+        </Logger>
+
+        <!-- Logger for SystemMetrics -->
+        <Logger name="SystemMetricsLogger" level="debug" additivity="false">
+            <AppenderRef ref="SystemMetricsAppender" />
+            <!-- If you also want console output for this class, add:
+            <AppenderRef ref=\"Console\" />
+            -->
+        </Logger>
+
+        <!-- Root logger (fallback for classes without explicit loggers) -->
+        <Root level="info">
+            <AppenderRef ref="Console" />
+        </Root>
+    </Loggers>
+</Configuration>
